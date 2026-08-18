@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: c2c_postgres
+    environment:
+      POSTGRES_USER: c2c_user
+      POSTGRES_PASSWORD: c2c_password
+      POSTGRES_DB: c2c_flea_market
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

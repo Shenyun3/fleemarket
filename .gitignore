@@ -1,0 +1,92 @@
+# ==========================================
+# 1. 依赖与包管理器 (Dependencies & Package Managers)
+# ==========================================
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ==========================================
+# 2. 构建产物与编译输出 (Build & Compilation Outputs)
+# ==========================================
+dist/
+dist-ssr/
+build/
+out/
+*.tsbuildinfo
+.rollup.cache/
+
+# ==========================================
+# 3. 环境变量与敏感凭据 (Environment Variables & Secrets)
+# ==========================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ==========================================
+# 4. 数据库与 ORM 生成产物 (Database & ORM Generated)
+# ==========================================
+/src/generated/prisma
+/backend/src/generated/prisma
+*.sqlite
+*.sqlite3
+*.db
+
+# ==========================================
+# 5. 用户上传媒体文件 (User Uploads)
+# ==========================================
+backend/uploads/*
+!backend/uploads/.gitkeep
+uploads/*
+!uploads/.gitkeep
+
+# ==========================================
+# 6. 测试产物与覆盖率报告 (Testing & Coverage)
+# ==========================================
+coverage/
+.vitest/
+.nyc_output/
+
+# ==========================================
+# 7. 系统文件 (OS Files)
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# 8. 编辑器与 IDE 配置 (Editor & IDE)
+# ==========================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-project
+*.sublime-workspace
+
+# ==========================================
+# 9. 缓存与临时文件 (Cache & Temp)
+# ==========================================
+.cache/
+.temp/
+.tmp/
+*.local
+.turbo/
+test.md
+

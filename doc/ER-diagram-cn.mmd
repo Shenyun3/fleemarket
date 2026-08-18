@@ -1,0 +1,156 @@
+erDiagram
+    users {
+        uuid id PK
+        varchar email UK
+        varchar password_hash
+        varchar username
+        varchar phone
+        text address
+        text bio
+        varchar status
+        int violation_count
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    categories {
+        uuid id PK
+        varchar name
+        uuid parent_id FK
+        timestamptz created_at
+    }
+
+    tags {
+        uuid id PK
+        varchar name UK
+        timestamptz created_at
+    }
+
+    products {
+        uuid id PK
+        uuid seller_id FK
+        uuid category_id FK
+        varchar title
+        text description
+        decimal price
+        varchar status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    product_images {
+        uuid id PK
+        uuid product_id FK
+        varchar url
+        int sort_order
+        timestamptz created_at
+    }
+
+    orders {
+        uuid id PK
+        uuid product_id FK
+        uuid buyer_id FK
+        uuid seller_id FK
+        varchar status
+        varchar tracking_number
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    reviews {
+        uuid id PK
+        uuid order_id FK
+        uuid reviewer_id FK
+        uuid reviewee_id FK
+        int rating
+        text comment
+        varchar reviewer_role
+        timestamptz created_at
+    }
+
+    balance_transactions {
+        uuid id PK
+        uuid user_id FK
+        uuid order_id FK
+        decimal amount
+        decimal fee
+        decimal net_amount
+        varchar type
+        varchar status
+        text bank_account_info
+        timestamptz created_at
+    }
+
+    favorites {
+        uuid user_id PK_FK
+        uuid product_id PK_FK
+        timestamptz created_at
+    }
+
+    comments {
+        uuid id PK
+        uuid product_id FK
+        uuid user_id FK
+        uuid parent_id FK
+        text content
+        timestamptz created_at
+    }
+
+    notifications {
+        uuid id PK
+        uuid user_id FK
+        varchar type
+        varchar title
+        text content
+        boolean is_read
+        timestamptz created_at
+    }
+
+    reports {
+        uuid id PK
+        uuid reporter_id FK
+        uuid product_id FK
+        uuid comment_id FK
+        text reason
+        text admin_notes
+        varchar status
+        varchar action_taken
+        timestamptz created_at
+    }
+
+    %% ==========================================
+    %% リレーションシップ定義 (Relationships)
+    %% ==========================================
+    
+    %% ユーザー関連のリレーション (User Relations)
+    users ||--o{ products : "出品 (seller_id)"
+    users ||--o{ orders : "購入 (buyer_id)"
+    users ||--o{ orders : "販売 (seller_id)"
+    users ||--o{ reviews : "評価作成 (reviewer_id)"
+    users ||--o{ reviews : "評価受信 (reviewee_id)"
+    users ||--o{ favorites : "お気に入り登録 (user_id)"
+    users ||--o{ comments : "コメント投稿 (user_id)"
+    users ||--o{ balance_transactions : "取引・売上残高 (user_id)"
+    users ||--o{ notifications : "通知受信 (user_id)"
+    users ||--o{ reports : "通報作成 (reporter_id)"
+
+    %% カテゴリの自己参照と商品リレーション (Category Relations)
+    categories |o--o{ categories : "親カテゴリ参照 (parent_id)"
+    categories ||--o{ products : "カテゴリ割り当て (category_id)"
+
+    %% 商品関連のリレーション (Product Relations)
+    products ||--|{ product_images : "商品画像登録 (product_id)"
+    products }|..|{ tags : "タグ設定 (多対多)"
+    products ||--o{ orders : "注文生成 (product_id)"
+    products ||--o{ favorites : "被お気に入り (product_id)"
+    products ||--o{ comments : "コメント紐付け (product_id)"
+    products ||--o{ reports : "通報対象商品 (product_id)"
+
+    %% 注文と評価、売上履歴のリレーション (Order Relations)
+    orders ||--o{ reviews : "取引評価 (order_id)"
+    orders ||--o{ balance_transactions : "売上反映 (order_id)"
+
+    %% コメントの自己参照と通報リレーション (Comment & Report Relations)
+    comments |o--o{ comments : "返信コメント (parent_id)"
+    comments ||--o{ reports : "通報対象コメント (comment_id)"
+    

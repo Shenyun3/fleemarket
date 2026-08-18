@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext" /* 严格对齐现代 Node.js 模块运行机制 */,
+    "moduleResolution": "NodeNext",
+    "rootDir": "." /* 源码根目录 */,
+    "outDir": "dist" /* 编译产物目录 */,
+
+    /* 严格类型检查与安全保障 */
+    "strict": true,
+    "verbatimModuleSyntax": true /* 防止类型导入被编译进 JS，严禁 CJS/ESM 语法混用 */,
+    "isolatedModules": true /* 确保单文件安全编译，完美适配 esbuild/tsx */,
+
+    /* 辅助与兼容性 */
+    "declaration": true /* 自动生成 .d.ts 类型声明文件 */,
+    "sourceMap": true /* 开启源码映射，方便调试 */,
+    "types": ["node"] /* 注入 Node.js 全局类型声明 */,
+    "esModuleInterop": true /* 允许使用 import x from 'commonjs' */,
+    "skipLibCheck": true /* 跳过库文件的类型检查，加快编译 */,
+    "forceConsistentCasingInFileNames": true /* 强制文件名大小写一致 */,
+    "resolveJsonModule": true
+  },
+  "include": ["src", "prisma"],
+  "exclude": ["dist", "node_modules", "doc", "res", "prisma.config.ts"]
+}
