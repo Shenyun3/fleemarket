@@ -264,3 +264,93 @@ export const loginUser = async (c: Context) => {
     );
   }
 };
+
+/**
+ * 获取当前登录用户资料 (GET /api/users/me)
+ */
+export const getCurrentUserProfile = async (c: Context) => {
+  try {
+    const user = c.get("jwtPayload");
+    const userId = user?.sub || user?.id;
+
+    if (!userId || typeof userId !== "string") {
+      return c.json({ success: false, error: "認証が必要です。" }, 401);
+    }
+
+    const profile = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        phone: true,
+        address: true,
+        bio: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+
+    if (!profile) {
+      return c.json({ success: false, error: "ユーザーが見つかりません。" }, 404);
+    }
+
+    return c.json({ success: true, data: profile });
+  } catch (error) {
+    console.error("获取用户资料错误:", error);
+    return c.json({ success: false, error: "サーバー内部エラーが発生しました。" }, 500);
+  }
+};
+
+/**
+ * 更新当前用户资料 (PUT /api/users/me)
+ */
+export const updateUserProfile = async (c: Context) => {
+  try {
+    const user = c.get("jwtPayload");
+    const userId = user?.sub || user?.id;
+
+    if (!userId || typeof userId !== "string") {
+      return c.json({ success: false, error: "認証が必要です。" }, 401);
+    }
+
+    const body = await c.req.json<{
+      username?: string;
+      phone?: string;
+      address?: string;
+      bio?: string;
+    }>();
+
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        username: body.username ?? undefined,
+        phone: body.phone ?? undefined,
+        address: body.address ?? undefined,
+        bio: body.bio ?? undefined,
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        phone: true,
+        address: true,
+        bio: true,
+        status: true,
+      },
+    });
+
+    return c.json(
+      {
+        success: true,
+        message: "プロフィールを更新しました。",
+        data: updated,
+      },
+      200,
+    );
+  } catch (error) {
+    console.error("更新用户资料错误:", error);
+    return c.json({ success: false, error: "サーバー内部エラーが発生しました。" }, 500);
+  }
+};
+

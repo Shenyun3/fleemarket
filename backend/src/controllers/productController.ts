@@ -311,12 +311,23 @@ export const getProducts = async (c: Context) => {
   try {
     const categoryId = c.req.query("categoryId");
     const keyword = c.req.query("keyword");
+    const minPrice = c.req.query("minPrice");
+    const maxPrice = c.req.query("maxPrice");
+
+    const priceFilter: { gte?: number; lte?: number } = {};
+    if (minPrice && !isNaN(Number(minPrice))) {
+      priceFilter.gte = Number(minPrice);
+    }
+    if (maxPrice && !isNaN(Number(maxPrice))) {
+      priceFilter.lte = Number(maxPrice);
+    }
 
     const products = await prisma.product.findMany({
       where: {
         status: ProductStatus.LISTED, // 必须只展示上架中的商品
         categoryId: categoryId || undefined,
         title: keyword ? { contains: keyword, mode: "insensitive" } : undefined,
+        price: Object.keys(priceFilter).length > 0 ? priceFilter : undefined,
       },
       include: {
         images: { orderBy: { sortOrder: "asc" }, take: 1 }, // 列表页只需带主图
