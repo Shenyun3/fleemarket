@@ -5,6 +5,9 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import ProductSearch from "./pages/ProductSearch";
+import ProductDetail from "./pages/ProductDetail";
+import ProductCreate from "./pages/ProductCreate";
 
 /**
  * アプリケーションのルーティング定義
@@ -29,6 +32,37 @@ function App() {
              保護対象画面（認証必須）
              ========================= */}
 
+        {/* 商品検索・一覧画面 (Home) */}
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <ProductSearch />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 商品出品画面 */}
+        <Route
+          path="/products/new"
+          element={
+            <ProtectedRoute>
+              <ProductCreate />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 商品詳細情報画面 */}
+        <Route
+          path="/products/:id"
+          element={
+            <ProtectedRoute>
+              <ProductDetail />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ダッシュボード (ユーザー情報) */}
         <Route
           path="/dashboard"
           element={
@@ -39,11 +73,14 @@ function App() {
         />
 
         {/* =========================
-             未定義URLアクセス時の制御
+             未定義URL・デフォルト遷移
              ========================= */}
 
-        {/* 存在しないパスへアクセスした場合、ログイン画面へ遷移 */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* 根路径默认重定向至商品检索 */}
+        <Route path="/" element={<Navigate to="/products" replace />} />
+
+        {/* 存在しないパスへアクセスした場合、商品検索画面へ遷移 */}
+        <Route path="*" element={<Navigate to="/products" replace />} />
       </Routes>
     </BrowserRouter>
   );

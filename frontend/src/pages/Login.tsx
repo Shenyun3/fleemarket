@@ -81,8 +81,8 @@ export const Login = () => {
         // ログインユーザー情報保存
         localStorage.setItem("user", JSON.stringify(res.data.user));
 
-        // ダッシュボード画面へ遷移
-        navigate("/dashboard");
+        // 商品検索画面へ遷移
+        navigate("/products");
       }
     } catch (err) {
       let errorMsg =
